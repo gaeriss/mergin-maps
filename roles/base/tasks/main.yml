@@ -1,0 +1,29 @@
+- name: create mergin user
+  become: true
+  user:
+    name: mergin
+
+- name: add python PPA
+  become: true
+  command:
+    cmd: add-apt-repository ppa:deadsnakes/ppa
+
+- name: Install dependancies
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - musl-dev
+    - iputils-ping
+    - gcc
+    - build-essential
+    - binutils
+    - cmake
+    - extra-cmake-modules
+    - libsqlite3-mod-spatialite
+    - libsqlite3-dev
+    - git
+    - python3.10
+    - python3-pip
+    - python3-setuptools

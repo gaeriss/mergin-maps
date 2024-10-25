@@ -1,0 +1,19 @@
+- name: create /etc/conf.d/
+  become: true
+  file:
+    path: /etc/conf.d/
+    state: directory
+
+- name: gunicorn configuration
+  become: true
+  copy:
+    src: gunicorn.conf
+    dest: /etc/conf.d/gunicorn
+
+- name: gunicorn service
+  become: true
+  copy:
+    src: gunicorn.service
+    dest: /etc/systemd/system/
+  notify:
+    Daemon reload

@@ -1,0 +1,13 @@
+- name: Daemon reload
+  become: true
+  systemd_service:
+    daemon_reload: true
+
+- name: celery restart
+  become: true
+  service:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - celery
+    - celerybeat

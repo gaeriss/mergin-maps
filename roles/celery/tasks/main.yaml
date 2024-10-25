@@ -1,0 +1,31 @@
+- name: Install celery
+  become: true
+  command:
+    cmd: pip install celery
+    creates: /usr/local/bin/celery
+
+- name: Celery service
+  become: true
+  copy:
+    src: celery.service
+    dest: /etc/systemd/system/
+  notify:
+    Daemon reload
+
+- name: Celery beat service
+  become: true
+  copy:
+    src: celerybeat.service
+    dest: /etc/systemd/system/
+  notify:
+    Daemon reload
+
+- name: Set dir permission
+  become: true
+  file:
+    path: "{{ item }}"
+    owner: mergin
+    state: directory
+  loop:
+    - /var/run/celery
+    - /var/log/celery

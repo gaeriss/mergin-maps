@@ -1,0 +1,39 @@
+- name: Clone mergin maps sources
+  become: true
+  become_user: mergin
+  git:
+    repo: https://github.com/MerginMaps/server/
+    dest: ~/mergin-maps
+    version: 2024.6.5
+
+- name: Update pip
+  become: true
+  become_user: mergin
+  command:
+    cmd: pip3 install --upgrade pip==24.0
+    creates: ~/.local/bin/pip3
+
+- name: Install pipenv
+  become: true
+  become_user: mergin
+  command:
+    cmd: ~/.local/bin/pip3 install pipenv==2024.0.1
+    creates: ~/.local/bin/pipenv
+
+- name: pipenv install
+  become: true
+  become_user: mergin
+  shell:
+    cmd: ~/.local/bin/pipenv --python /usr/bin/python3.10 install
+    chdir: ~/mergin-maps/server
+
+- name: Configure services
+  become: true
+  service:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  loop:
+    - celery
+    - celerybeat
+    - gunicorn

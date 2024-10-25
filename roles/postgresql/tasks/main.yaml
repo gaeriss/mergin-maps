@@ -1,0 +1,33 @@
+- name: install postgresql
+  become: true
+  package:
+    name: postgresql
+    state: present
+  notify:
+    Daemon reload
+
+- name: start postgresql
+  become: true
+  service:
+    name: postgresql
+    state: started
+
+- name: Install psycopg2
+  become: true
+  package:
+    name: python3-psycopg2
+    state: present
+
+- name: create mergin postgresql user
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: mergin
+    password: mergin
+
+- name: create mergin database
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: mergin
+    owner: mergin

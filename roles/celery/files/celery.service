@@ -1,0 +1,13 @@
+[Unit]
+Description=Celery Service
+After=network.target
+
+[Service]
+User=mergin
+Group=mergin
+WorkingDirectory=/home/mergin/mergin-maps/server
+ExecStart=/home/mergin/.local/bin/pipenv run celeryc -A application.celery beat
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
